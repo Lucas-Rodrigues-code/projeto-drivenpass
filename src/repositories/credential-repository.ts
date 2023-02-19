@@ -20,7 +20,9 @@ async function findByid(userId: number, title: string) {
             title
         }
     })
+    
     return credential
+    
 }
 
 async function findAllCredential(userId: number) {
