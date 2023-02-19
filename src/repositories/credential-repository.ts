@@ -38,8 +38,14 @@ async function getCredentialById(id: number) {
     const credential = await prisma.credential.findUnique({
         where: {
             id
-        }
+        },
+        include: { user :true}
     })
+    return credential
+}
+
+async function deleteCredentialById(id: number) {
+    const credential = await prisma.credential.delete({ where: { id } });
     return credential
 }
 
@@ -47,5 +53,6 @@ export const credentialRepository = {
     findByid,
     create,
     findAllCredential,
-    getCredentialById
+    getCredentialById,
+    deleteCredentialById
 }

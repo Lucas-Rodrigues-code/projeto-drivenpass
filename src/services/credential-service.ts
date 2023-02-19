@@ -35,19 +35,36 @@ async function getCredential(userId: number) {
     return credential
 }
 
-async function getCredentialById(id: number) {
+async function getCredentialById(id: number,userId:number) {
     let credential = await credentialRepository.getCredentialById(id)
     if (!credential) {
         throw idError()
     }
+    if (credential.user.id !== userId) {
+        throw idError()
+      }
     const cryptr = new Cryptr(process.env.PASSWORD_SECRET);
     credential.password = cryptr.decrypt(credential.password)
 
     return credential
 }
 
+ async function deleteCredentialById(id: number,userId:number) {
+   const credential = await credentialRepository.getCredentialById(id)
+   
+    if (!credential) {
+        throw idError()
+    }
+    if (credential.user.id !== userId) {
+        throw idError()
+      }
+    let credentiall = await credentialRepository.deleteCredentialById(id)
+    return credentiall
+} 
+
 export const credentialService = {
     create,
     getCredential,
-    getCredentialById
+    getCredentialById,
+    deleteCredentialById
 }
