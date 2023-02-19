@@ -1,6 +1,5 @@
-import { Console } from 'console';
 import Cryptr from 'cryptr';
-import { titleAlreadyInUse } from "../errors/email-error.js";
+import { idError, titleAlreadyInUse } from "../errors/email-error.js";
 import { credentialRepository } from "../repositories/credential-repository.js";
 
 export async function create(title: string, url: string, username: string, password: string, userId: number) {
@@ -36,8 +35,19 @@ async function getCredential(userId: number) {
     return credential
 }
 
+async function getCredentialById(id: number) {
+    let credential = await credentialRepository.getCredentialById(id)
+    if (!credential) {
+        throw idError()
+    }
+    const cryptr = new Cryptr(process.env.PASSWORD_SECRET);
+    credential.password = cryptr.decrypt(credential.password)
+
+    return credential
+}
 
 export const credentialService = {
     create,
-    getCredential
+    getCredential,
+    getCredentialById
 }

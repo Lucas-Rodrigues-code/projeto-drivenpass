@@ -34,8 +34,18 @@ async function findAllCredential(userId: number) {
     return credential
 }
 
+async function getCredentialById(id: number) {
+    const credential = await prisma.credential.findUnique({
+        where: {
+            id
+        }
+    })
+    return credential
+}
+
 export const credentialRepository = {
     findByid,
     create,
-    findAllCredential
+    findAllCredential,
+    getCredentialById
 }

@@ -20,3 +20,10 @@ export function titleAlreadyInUse(): ApplicationError {
     message: "title already in use",
   };
 }
+
+export function idError(): ApplicationError {
+  return {
+    name: "Conflict",
+    message: "id does not exist or is not yours",
+  };
+}
