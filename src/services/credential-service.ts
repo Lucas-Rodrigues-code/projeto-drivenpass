@@ -25,6 +25,13 @@ async function rulesCredential(userId:number,title:string) {
         }  
 }
 
+async function getCredential(userId:number) {
+    const credential = await credentialRepository.findAllCredential(userId)
+    return credential
+}
+
+
 export const credentialService = {
-    create
+    create,
+    getCredential
 }

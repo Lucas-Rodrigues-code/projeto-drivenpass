@@ -13,7 +13,19 @@ export async function createCredential(req: Request, res: Response) {
         if(error.name === "Conflict"){
             res.status(409).send(error)
         }
-       
         res.status(500)
     }
 }
+
+export async function getAllCredential(req: Request, res: Response) {
+    const  userId  = res.locals.userId;
+    
+    try {
+        const credential = await credentialService.getCredential(userId);
+        
+        return res.status(200).send(credential)
+    } catch (error) {
+        res.status(500)
+    }
+}
+

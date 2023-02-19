@@ -1,6 +1,6 @@
 import prisma from "../database/database.js"
 
-async function create(title: string, url: string, username: string, password: string,userId:number) {
+async function create(title: string, url: string, username: string, password: string, userId: number) {
     const credential = await prisma.credential.create({
         data: {
             title,
@@ -13,7 +13,7 @@ async function create(title: string, url: string, username: string, password: st
     return credential
 }
 
-async function findByid(userId: number,title:string) {
+async function findByid(userId: number, title: string) {
     const credential = await prisma.credential.findFirst({
         where: {
             userId,
@@ -23,7 +23,17 @@ async function findByid(userId: number,title:string) {
     return credential
 }
 
+async function findAllCredential(userId: number) {
+    const credential = await prisma.credential.findMany({
+        where: {
+            userId
+        }
+    })
+    return credential
+}
+
 export const credentialRepository = {
     findByid,
-    create
+    create,
+    findAllCredential
 }
