@@ -13,3 +13,10 @@ export function invalidCredentialsError(): ApplicationError {
     message: "email or password are incorrect",
   };
 }
+
+export function titleAlreadyInUse(): ApplicationError {
+  return {
+    name: "Conflict",
+    message: "title already in use",
+  };
+}
