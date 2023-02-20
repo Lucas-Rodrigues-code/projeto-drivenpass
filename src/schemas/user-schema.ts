@@ -11,3 +11,9 @@ export const createCredentialSchema = Joi.object({
   username:Joi.string().required(),
   password:Joi.string().min(6).required()
 });
+
+export const createNetworkSchema = Joi.object({
+  title: Joi.string().required(),
+  network: Joi.string().required(),
+  password:Joi.string().min(6).required()
+});

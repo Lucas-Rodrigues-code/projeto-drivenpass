@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { createCredentialSchema, createUserSchema } from "../schemas/user-schema.js";
+import { createCredentialSchema, createNetworkSchema, createUserSchema } from "../schemas/user-schema.js";
 export function validateBody(req: Request, res: Response, next: NextFunction) {
     const user = req.body;
 
@@ -23,5 +23,18 @@ export function validateBodyCredential(req: Request, res: Response, next: NextFu
     }
     
     res.locals.credential = credential;
+    next();
+}
+
+export function validateBodyNetwork(req: Request, res: Response, next: NextFunction) {
+    const network = req.body
+
+    const { error } = createNetworkSchema.validate(req.body, { abortEarly: false });
+    if (error) {
+        const errors = error.details.map((detail) => detail.message);
+        return res.status(422).send(errors);
+    }
+    
+    res.locals.network = network;
     next();
 }
