@@ -1,4 +1,4 @@
-import { duplicatedEmailError, invalidCredentialsError } from "../errors/email-error.js";
+import { duplicatedEmailError, invalidCredentialsError } from "../errors/errors.js";
 import bcrypt from "bcrypt";
 import { userRepository } from "../repositories/user-repository.js";
 import { User } from ".prisma/client";

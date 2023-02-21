@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { createCredentialSchema, createNetworkSchema, createUserSchema } from "../schemas/user-schema.js";
+
 export function validateBody(req: Request, res: Response, next: NextFunction) {
     const user = req.body;
 
@@ -8,7 +9,7 @@ export function validateBody(req: Request, res: Response, next: NextFunction) {
         const errors = error.details.map((detail) => detail.message);
         return res.status(422).send(errors);
     }
-    
+
     res.locals.user = user;
     next();
 }
@@ -21,7 +22,7 @@ export function validateBodyCredential(req: Request, res: Response, next: NextFu
         const errors = error.details.map((detail) => detail.message);
         return res.status(422).send(errors);
     }
-    
+
     res.locals.credential = credential;
     next();
 }
@@ -34,7 +35,7 @@ export function validateBodyNetwork(req: Request, res: Response, next: NextFunct
         const errors = error.details.map((detail) => detail.message);
         return res.status(422).send(errors);
     }
-    
+
     res.locals.network = network;
     next();
 }

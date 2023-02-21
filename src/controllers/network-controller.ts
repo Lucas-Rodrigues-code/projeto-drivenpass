@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { networkService } from "../services/network-service.js";
+
 export async function createNetwork(req: Request, res: Response) {
     const { title, network, password } = res.locals.network;
     const userId = res.locals.userId;
@@ -33,7 +34,7 @@ export async function getNetworklById(req: Request, res: Response) {
     const userId = res.locals.userId;
 
     try {
-        const network = await networkService.getNetworklById(id,userId);
+        const network = await networkService.getNetworklById(id, userId);
         return res.status(200).send(network)
     } catch (error) {
         if (error.name === "Conflict") {
@@ -48,7 +49,7 @@ export async function deleteNetworklById(req: Request, res: Response) {
     const userId = res.locals.userId;
 
     try {
-        const network = await networkService.deleteNetworkById(id,userId);
+        const network = await networkService.deleteNetworkById(id, userId);
         return res.status(200).send(network)
     } catch (error) {
         if (error.name === "Conflict") {
@@ -57,4 +58,3 @@ export async function deleteNetworklById(req: Request, res: Response) {
         res.status(500)
     }
 }
- 

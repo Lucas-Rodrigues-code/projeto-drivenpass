@@ -34,7 +34,7 @@ export async function getCredentialById(req: Request, res: Response) {
     const userId = res.locals.userId;
 
     try {
-        const credential = await credentialService.getCredentialById(id,userId);
+        const credential = await credentialService.getCredentialById(id, userId);
         return res.status(200).send(credential)
     } catch (error) {
         if (error.name === "Conflict") {
@@ -44,12 +44,12 @@ export async function getCredentialById(req: Request, res: Response) {
     }
 }
 
- export async function deleteCredentialById(req: Request, res: Response) {
+export async function deleteCredentialById(req: Request, res: Response) {
     const id = Number(req.params.id)
     const userId = res.locals.userId;
 
     try {
-        const credential = await credentialService.deleteCredentialById(id,userId);
+        const credential = await credentialService.deleteCredentialById(id, userId);
         return res.status(200).send(credential)
     } catch (error) {
         if (error.name === "Conflict") {
@@ -58,4 +58,3 @@ export async function getCredentialById(req: Request, res: Response) {
         res.status(500)
     }
 }
- 

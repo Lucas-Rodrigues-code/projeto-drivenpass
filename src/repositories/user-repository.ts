@@ -1,5 +1,4 @@
 import prisma from "../database/database.js";
-import { User } from ".prisma/client";
 
 async function create(email: string, password: string) {
   return prisma.user.create({
@@ -16,9 +15,9 @@ async function findByEmail(email: string) {
       email: email
     },
     select: {
-      id:true,
+      id: true,
       email: true,
-      password:true
+      password: true
     },
   })
   return emailUser

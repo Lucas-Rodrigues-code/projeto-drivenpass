@@ -1,5 +1,5 @@
 import Cryptr from 'cryptr';
-import { idError } from '../errors/email-error.js';
+import { idError } from '../errors/errors.js';
 import { networkRepository } from '../repositories/network-repository.js';
 
 export async function create(title: string, network: string, password: string, userId: number) {
