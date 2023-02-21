@@ -34,29 +34,26 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { userService } from "../services/user-service.js";
-export function userPost(req, res) {
+import { credentialService } from "../services/credential-service.js";
+export function createCredential(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, email, password, user, error_1;
+        var _a, username, password, url, title, userId, credential, error_1;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
-                    _a = res.locals.user, email = _a.email, password = _a.password;
+                    _a = res.locals.credential, username = _a.username, password = _a.password, url = _a.url, title = _a.title;
+                    userId = res.locals.userId;
                     _b.label = 1;
                 case 1:
                     _b.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, userService.createUser(email, password)];
+                    return [4 /*yield*/, credentialService.create(title, url, username, password, userId)];
                 case 2:
-                    user = _b.sent();
-                    return [2 /*return*/, res.status(200).json({
-                            id: user.id,
-                            email: user.email
-                        })];
+                    credential = _b.sent();
+                    return [2 /*return*/, res.status(200).send(credential)];
                 case 3:
                     error_1 = _b.sent();
-                    console.log(error_1.name);
-                    if (error_1.name === "DuplicatedEmailError") {
-                        return [2 /*return*/, res.status(409).send(error_1)];
+                    if (error_1.name === "Conflict") {
+                        res.status(409).send(error_1);
                     }
                     res.status(500);
                     return [3 /*break*/, 4];
@@ -65,24 +62,75 @@ export function userPost(req, res) {
         });
     });
 }
-export function userlogin(req, res) {
+export function getAllCredential(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, email, password, token, error_2;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+        var userId, credential, error_2;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
                 case 0:
-                    _a = res.locals.user, email = _a.email, password = _a.password;
-                    _b.label = 1;
+                    userId = res.locals.userId;
+                    _a.label = 1;
                 case 1:
-                    _b.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, userService.signIn(email, password)];
+                    _a.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, credentialService.getCredential(userId)];
                 case 2:
-                    token = _b.sent();
-                    return [2 /*return*/, res.status(200).send(token)];
+                    credential = _a.sent();
+                    return [2 /*return*/, res.status(200).send(credential)];
                 case 3:
-                    error_2 = _b.sent();
-                    if (error_2.name === "InvalidCredentialsError") {
-                        return [2 /*return*/, res.status(409).send(error_2)];
+                    error_2 = _a.sent();
+                    res.status(500);
+                    return [3 /*break*/, 4];
+                case 4: return [2 /*return*/];
+            }
+        });
+    });
+}
+export function getCredentialById(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var id, userId, credential, error_3;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    id = Number(req.params.id);
+                    userId = res.locals.userId;
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, credentialService.getCredentialById(id, userId)];
+                case 2:
+                    credential = _a.sent();
+                    return [2 /*return*/, res.status(200).send(credential)];
+                case 3:
+                    error_3 = _a.sent();
+                    if (error_3.name === "Conflict") {
+                        res.status(409).send(error_3);
+                    }
+                    res.status(500);
+                    return [3 /*break*/, 4];
+                case 4: return [2 /*return*/];
+            }
+        });
+    });
+}
+export function deleteCredentialById(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var id, userId, credential, error_4;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    id = Number(req.params.id);
+                    userId = res.locals.userId;
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, credentialService.deleteCredentialById(id, userId)];
+                case 2:
+                    credential = _a.sent();
+                    return [2 /*return*/, res.status(200).send(credential)];
+                case 3:
+                    error_4 = _a.sent();
+                    if (error_4.name === "Conflict") {
+                        res.status(409).send(error_4);
                     }
                     res.status(500);
                     return [3 /*break*/, 4];

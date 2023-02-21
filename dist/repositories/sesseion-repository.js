@@ -35,41 +35,22 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import prisma from "../database/database.js";
-function create(email, password) {
+function create(token, userId) {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            return [2 /*return*/, prisma.user.create({
-                    data: {
-                        email: email,
-                        password: password
-                    }
-                })];
-        });
-    });
-}
-function findByEmail(email) {
-    return __awaiter(this, void 0, void 0, function () {
-        var emailUser;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, prisma.user.findUnique({
-                        where: {
-                            email: email
-                        },
-                        select: {
-                            id: true,
-                            email: true,
-                            password: true
+                case 0: return [4 /*yield*/, prisma.session.create({
+                        data: {
+                            userId: userId,
+                            token: token
                         }
                     })];
-                case 1:
-                    emailUser = _a.sent();
-                    return [2 /*return*/, emailUser];
+                case 1: return [2 /*return*/, _a.sent()];
             }
         });
     });
 }
-export var userRepository = {
-    create: create,
-    findByEmail: findByEmail
+var sessionRepository = {
+    create: create
 };
+export default sessionRepository;

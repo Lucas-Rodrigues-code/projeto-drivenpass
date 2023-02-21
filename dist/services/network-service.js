@@ -34,42 +34,80 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import prisma from "../database/database.js";
-function create(email, password) {
+import Cryptr from 'cryptr';
+import { idError } from '../errors/errors.js';
+import { networkRepository } from '../repositories/network-repository.js';
+export function create(title, network, password, userId) {
     return __awaiter(this, void 0, void 0, function () {
+        var cryptr, hashedPassword;
         return __generator(this, function (_a) {
-            return [2 /*return*/, prisma.user.create({
-                    data: {
-                        email: email,
-                        password: password
-                    }
-                })];
+            cryptr = new Cryptr(process.env.PASSWORD_SECRET);
+            hashedPassword = cryptr.encrypt(password);
+            return [2 /*return*/, networkRepository.create(title, network, hashedPassword, userId)];
         });
     });
 }
-function findByEmail(email) {
+function getAllNetwork(userId) {
     return __awaiter(this, void 0, void 0, function () {
-        var emailUser;
+        var network, cryptr, i;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, prisma.user.findUnique({
-                        where: {
-                            email: email
-                        },
-                        select: {
-                            id: true,
-                            email: true,
-                            password: true
-                        }
-                    })];
+                case 0: return [4 /*yield*/, networkRepository.findAllNetwork(userId)];
                 case 1:
-                    emailUser = _a.sent();
-                    return [2 /*return*/, emailUser];
+                    network = _a.sent();
+                    cryptr = new Cryptr(process.env.PASSWORD_SECRET);
+                    for (i = 0; i < network.length; i++) {
+                        network[i].password = cryptr.decrypt(network[i].password);
+                    }
+                    return [2 /*return*/, network];
             }
         });
     });
 }
-export var userRepository = {
+function getNetworklById(id, userId) {
+    return __awaiter(this, void 0, void 0, function () {
+        var network, cryptr;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, networkRepository.getNetworklById(id)];
+                case 1:
+                    network = _a.sent();
+                    if (!network) {
+                        throw idError();
+                    }
+                    if (network.user.id !== userId) {
+                        throw idError();
+                    }
+                    cryptr = new Cryptr(process.env.PASSWORD_SECRET);
+                    network.password = cryptr.decrypt(network.password);
+                    return [2 /*return*/, network];
+            }
+        });
+    });
+}
+function deleteNetworkById(id, userId) {
+    return __awaiter(this, void 0, void 0, function () {
+        var network;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, networkRepository.getNetworklById(id)];
+                case 1:
+                    network = _a.sent();
+                    if (!network) {
+                        throw idError();
+                    }
+                    if (network.user.id !== userId) {
+                        throw idError();
+                    }
+                    return [4 /*yield*/, networkRepository.deleteNetworkById(id)];
+                case 2: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+export var networkService = {
     create: create,
-    findByEmail: findByEmail
+    getAllNetwork: getAllNetwork,
+    getNetworklById: getNetworklById,
+    deleteNetworkById: deleteNetworkById
 };

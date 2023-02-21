@@ -1,10 +1,12 @@
-import express from "express";
+import express, { json } from "express";
+import { credentialRouter } from "./routers/credential-router.js";
+import { networklRouter } from "./routers/network-router.js";
 import { usersRouter } from "./routers/user-router.js";
 var server = express();
-server.get("/health", function (req, res) {
-    res.send("ok");
-});
+server.use(json());
 server.use(usersRouter);
+server.use(credentialRouter);
+server.use(networklRouter);
 server.listen(4000, function () {
     console.log("Executando");
 });

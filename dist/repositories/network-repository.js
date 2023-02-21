@@ -35,41 +35,77 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import prisma from "../database/database.js";
-function create(email, password) {
+function create(title, network, password, userId) {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            return [2 /*return*/, prisma.user.create({
-                    data: {
-                        email: email,
-                        password: password
-                    }
-                })];
-        });
-    });
-}
-function findByEmail(email) {
-    return __awaiter(this, void 0, void 0, function () {
-        var emailUser;
+        var credential;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, prisma.user.findUnique({
-                        where: {
-                            email: email
-                        },
-                        select: {
-                            id: true,
-                            email: true,
-                            password: true
+                case 0: return [4 /*yield*/, prisma.network.create({
+                        data: {
+                            title: title,
+                            network: network,
+                            password: password,
+                            userId: userId
                         }
                     })];
                 case 1:
-                    emailUser = _a.sent();
-                    return [2 /*return*/, emailUser];
+                    credential = _a.sent();
+                    return [2 /*return*/, credential];
             }
         });
     });
 }
-export var userRepository = {
+function findAllNetwork(userId) {
+    return __awaiter(this, void 0, void 0, function () {
+        var network;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, prisma.network.findMany({
+                        where: {
+                            userId: userId
+                        }
+                    })];
+                case 1:
+                    network = _a.sent();
+                    return [2 /*return*/, network];
+            }
+        });
+    });
+}
+function getNetworklById(id) {
+    return __awaiter(this, void 0, void 0, function () {
+        var network;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, prisma.network.findUnique({
+                        where: {
+                            id: id
+                        },
+                        include: { user: true }
+                    })];
+                case 1:
+                    network = _a.sent();
+                    return [2 /*return*/, network];
+            }
+        });
+    });
+}
+function deleteNetworkById(id) {
+    return __awaiter(this, void 0, void 0, function () {
+        var network;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, prisma.network["delete"]({ where: { id: id } })];
+                case 1:
+                    network = _a.sent();
+                    return [2 /*return*/, network];
+            }
+        });
+    });
+}
+export var networkRepository = {
     create: create,
-    findByEmail: findByEmail
+    findAllNetwork: findAllNetwork,
+    getNetworklById: getNetworklById,
+    deleteNetworkById: deleteNetworkById
 };

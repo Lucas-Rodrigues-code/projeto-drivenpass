@@ -34,42 +34,41 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+import * as jwt from "jsonwebtoken";
 import prisma from "../database/database.js";
-function create(email, password) {
+export function authenticateToken(req, res, next) {
     return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            return [2 /*return*/, prisma.user.create({
-                    data: {
-                        email: email,
-                        password: password
-                    }
-                })];
-        });
-    });
-}
-function findByEmail(email) {
-    return __awaiter(this, void 0, void 0, function () {
-        var emailUser;
+        var authHeader, token, userId, session, err_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, prisma.user.findUnique({
-                        where: {
-                            email: email
-                        },
-                        select: {
-                            id: true,
-                            email: true,
-                            password: true
-                        }
-                    })];
+                case 0:
+                    authHeader = req.header("Authorization");
+                    if (!authHeader)
+                        return [2 /*return*/, res.status(401).send({ message: "You must be signed in to continue" })];
+                    token = authHeader.split(" ")[1];
+                    if (!token)
+                        return [2 /*return*/, res.status(401).send({ message: "You must be signed in to continue" })];
+                    _a.label = 1;
                 case 1:
-                    emailUser = _a.sent();
-                    return [2 /*return*/, emailUser];
+                    _a.trys.push([1, 3, , 4]);
+                    userId = jwt.verify(token, process.env.JWT_SECRET).userId;
+                    return [4 /*yield*/, prisma.session.findFirst({
+                            where: {
+                                token: token
+                            }
+                        })];
+                case 2:
+                    session = _a.sent();
+                    if (!session)
+                        return [2 /*return*/, res.status(401).send({ message: "You must be signed in to continue" })];
+                    res.locals.userId = userId;
+                    next();
+                    return [3 /*break*/, 4];
+                case 3:
+                    err_1 = _a.sent();
+                    return [2 /*return*/, res.status(401)];
+                case 4: return [2 /*return*/];
             }
         });
     });
 }
-export var userRepository = {
-    create: create,
-    findByEmail: findByEmail
-};

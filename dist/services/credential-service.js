@@ -34,106 +34,106 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { duplicatedEmailError, invalidCredentialsError } from "../errors/errors.js";
-import bcrypt from "bcrypt";
-import { userRepository } from "../repositories/user-repository.js";
-import jwt from "jsonwebtoken";
-import sessionRepository from "../repositories/sesseion-repository.js";
-export function createUser(email, password) {
+import Cryptr from 'cryptr';
+import { idError, titleAlreadyInUse } from "../errors/errors.js";
+import { credentialRepository } from "../repositories/credential-repository.js";
+export function create(title, url, username, password, userId) {
     return __awaiter(this, void 0, void 0, function () {
-        var hashedPassword;
+        var cryptr, hashedPassword;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, uniqueEmail(email)];
+                case 0: return [4 /*yield*/, rulesCredential(userId, title)];
                 case 1:
                     _a.sent();
-                    return [4 /*yield*/, bcrypt.hash(password, 12)];
-                case 2:
-                    hashedPassword = _a.sent();
-                    return [2 /*return*/, userRepository.create(email, hashedPassword)];
+                    cryptr = new Cryptr(process.env.PASSWORD_SECRET);
+                    hashedPassword = cryptr.encrypt(password);
+                    return [2 /*return*/, credentialRepository.create(title, url, username, hashedPassword, userId)];
             }
         });
     });
 }
-function uniqueEmail(email) {
+function rulesCredential(userId, title) {
     return __awaiter(this, void 0, void 0, function () {
-        var userWithSameEmail;
+        var uniqueTitle;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, userRepository.findByEmail(email)];
+                case 0: return [4 /*yield*/, credentialRepository.findByid(userId, title)];
                 case 1:
-                    userWithSameEmail = _a.sent();
-                    if (userWithSameEmail) {
-                        throw duplicatedEmailError();
+                    uniqueTitle = _a.sent();
+                    if (!uniqueTitle) {
+                        return [2 /*return*/];
+                    }
+                    if (uniqueTitle.title === title) {
+                        throw titleAlreadyInUse();
                     }
                     return [2 /*return*/];
             }
         });
     });
 }
-function signIn(email, password) {
+function getCredential(userId) {
     return __awaiter(this, void 0, void 0, function () {
-        var user, token;
+        var credential, cryptr, i;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, getUserOrFail(email)];
+                case 0: return [4 /*yield*/, credentialRepository.findAllCredential(userId)];
                 case 1:
-                    user = _a.sent();
-                    return [4 /*yield*/, validatePasswordOrFail(password, user.password)];
+                    credential = _a.sent();
+                    cryptr = new Cryptr(process.env.PASSWORD_SECRET);
+                    for (i = 0; i < credential.length; i++) {
+                        credential[i].password = cryptr.decrypt(credential[i].password);
+                    }
+                    return [2 /*return*/, credential];
+            }
+        });
+    });
+}
+function getCredentialById(id, userId) {
+    return __awaiter(this, void 0, void 0, function () {
+        var credential, cryptr;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, credentialRepository.getCredentialById(id)];
+                case 1:
+                    credential = _a.sent();
+                    if (!credential) {
+                        throw idError();
+                    }
+                    if (credential.user.id !== userId) {
+                        throw idError();
+                    }
+                    cryptr = new Cryptr(process.env.PASSWORD_SECRET);
+                    credential.password = cryptr.decrypt(credential.password);
+                    return [2 /*return*/, credential];
+            }
+        });
+    });
+}
+function deleteCredentialById(id, userId) {
+    return __awaiter(this, void 0, void 0, function () {
+        var credential, credentiall;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, credentialRepository.getCredentialById(id)];
+                case 1:
+                    credential = _a.sent();
+                    if (!credential) {
+                        throw idError();
+                    }
+                    if (credential.user.id !== userId) {
+                        throw idError();
+                    }
+                    return [4 /*yield*/, credentialRepository.deleteCredentialById(id)];
                 case 2:
-                    _a.sent();
-                    return [4 /*yield*/, createSession(user.id)];
-                case 3:
-                    token = _a.sent();
-                    return [2 /*return*/, token];
+                    credentiall = _a.sent();
+                    return [2 /*return*/, credentiall];
             }
         });
     });
 }
-function getUserOrFail(email) {
-    return __awaiter(this, void 0, void 0, function () {
-        var user;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, userRepository.findByEmail(email)];
-                case 1:
-                    user = _a.sent();
-                    if (!user)
-                        throw invalidCredentialsError();
-                    return [2 /*return*/, user];
-            }
-        });
-    });
-}
-function validatePasswordOrFail(password, userPassword) {
-    return __awaiter(this, void 0, void 0, function () {
-        var isPasswordValid;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, bcrypt.compare(password, userPassword)];
-                case 1:
-                    isPasswordValid = _a.sent();
-                    if (!isPasswordValid)
-                        throw invalidCredentialsError();
-                    return [2 /*return*/];
-            }
-        });
-    });
-}
-function createSession(userId) {
-    return __awaiter(this, void 0, void 0, function () {
-        var token;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    token = jwt.sign({ userId: userId }, process.env.JWT_SECRET);
-                    return [4 /*yield*/, sessionRepository.create(token, userId)];
-                case 1: return [2 /*return*/, _a.sent()];
-            }
-        });
-    });
-}
-export var userService = {
-    createUser: createUser,
-    signIn: signIn
+export var credentialService = {
+    create: create,
+    getCredential: getCredential,
+    getCredentialById: getCredentialById,
+    deleteCredentialById: deleteCredentialById
 };
