@@ -15,7 +15,7 @@ export async function create(title: string, network: string, password: string, u
 }
 
 async function getAllNetwork(userId: number) {
-    let network = await networkRepository.findAllNetwork(userId)  
+    let network = await networkRepository.findAllNetwork(userId)
     const cryptr = new Cryptr(process.env.PASSWORD_SECRET);
     for (let i = 0; i < network.length; i++) {
         network[i].password = cryptr.decrypt(network[i].password)
@@ -23,23 +23,37 @@ async function getAllNetwork(userId: number) {
     return network
 }
 
-async function getNetworklById(id: number,userId:number) {
+async function getNetworklById(id: number, userId: number) {
     let network = await networkRepository.getNetworklById(id)
     if (!network) {
         throw idError()
     }
     if (network.user.id !== userId) {
         throw idError()
-      }
+    }
     const cryptr = new Cryptr(process.env.PASSWORD_SECRET);
     network.password = cryptr.decrypt(network.password)
 
     return network
 }
 
+async function deleteNetworkById(id: number, userId: number) {
+    const network = await networkRepository.getNetworklById(id)
+
+    if (!network) {
+        throw idError()
+    }
+    if (network.user.id !== userId) {
+        throw idError()
+    }
+    return await networkRepository.deleteNetworkById(id)
+
+}
+
 
 export const networkService = {
     create,
     getAllNetwork,
-    getNetworklById
+    getNetworklById,
+    deleteNetworkById
 }

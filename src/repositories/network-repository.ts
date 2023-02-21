@@ -31,8 +31,14 @@ async function getNetworklById(id: number) {
     return network
 }
 
+async function deleteNetworkById(id: number) {
+    const network = await prisma.network.delete({ where: { id } });
+    return network
+}
+
 export const networkRepository = {
     create,
     findAllNetwork,
-    getNetworklById
+    getNetworklById,
+    deleteNetworkById
 }

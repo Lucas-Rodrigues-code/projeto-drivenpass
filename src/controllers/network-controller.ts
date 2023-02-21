@@ -42,3 +42,19 @@ export async function getNetworklById(req: Request, res: Response) {
         res.status(500)
     }
 }
+
+export async function deleteNetworklById(req: Request, res: Response) {
+    const id = Number(req.params.id)
+    const userId = res.locals.userId;
+
+    try {
+        const network = await networkService.deleteNetworkById(id,userId);
+        return res.status(200).send(network)
+    } catch (error) {
+        if (error.name === "Conflict") {
+            res.status(409).send(error)
+        }
+        res.status(500)
+    }
+}
+ 
