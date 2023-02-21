@@ -15,3 +15,15 @@ export async function createNetwork(req: Request, res: Response) {
         res.status(500)
     }
 }
+
+export async function getAllNetwork(req: Request, res: Response) {
+    const userId = res.locals.userId;
+
+    try {
+        const network = await networkService.getAllNetwork(userId);
+
+        return res.status(200).send(network)
+    } catch (error) {
+        res.status(500)
+    }
+}

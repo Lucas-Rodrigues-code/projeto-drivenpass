@@ -12,6 +12,17 @@ async function create(title: string, network: string, password: string, userId: 
     return credential
 }
 
+async function findAllNetwork(userId: number) {
+    const network = await prisma.network.findMany({
+        where: {
+            userId
+        }
+    })
+    console.log(network)
+    return network
+}
+
 export const networkRepository = {
-    create
+    create,
+    findAllNetwork
 }
