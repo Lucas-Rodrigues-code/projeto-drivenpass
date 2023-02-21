@@ -18,11 +18,21 @@ async function findAllNetwork(userId: number) {
             userId
         }
     })
-    console.log(network)
+    return network
+}
+
+async function getNetworklById(id: number) {
+    const network = await prisma.network.findUnique({
+        where: {
+            id
+        },
+        include: { user :true}
+    })
     return network
 }
 
 export const networkRepository = {
     create,
-    findAllNetwork
+    findAllNetwork,
+    getNetworklById
 }
