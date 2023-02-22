@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { createNetwork, deleteNetworklById, getAllNetwork, getNetworklById } from "../controllers/network-controller.js";
-import { validateBodyNetwork } from "../middlewares/validation-middleware.js";
-import { authenticateToken } from "../middlewares/validationToken-middleware.js";
+import { createNetwork, deleteNetworklById, getAllNetwork, getNetworklById } from "../controllers//network-controller";
+import { validateBodyNetwork } from "../middlewares/validation-middleware";
+import { authenticateToken } from "../middlewares/validationToken-middleware";
 
 const networklRouter = Router();
 

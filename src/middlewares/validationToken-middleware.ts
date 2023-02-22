@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import * as jwt from "jsonwebtoken";
-import  prisma  from "../database/database.js";
+import  prisma  from "../database/database";
 
 export async function authenticateToken(req: Request, res: Response, next: NextFunction) {
     const authHeader = req.header("Authorization");

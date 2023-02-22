@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { networkService } from "../services/network-service.js";
+import { networkService } from "../services/network-service";
 
 export async function createNetwork(req: Request, res: Response) {
     const { title, network, password } = res.locals.network;

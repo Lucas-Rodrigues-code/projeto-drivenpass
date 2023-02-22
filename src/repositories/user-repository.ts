@@ -1,4 +1,4 @@
-import prisma from "../database/database.js";
+import prisma from "../database/database";
 
 async function create(email: string, password: string) {
   return prisma.user.create({

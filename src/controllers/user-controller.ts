@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { userService } from "../services/user-service.js";
+import { userService } from "../services/user-service";
 
 export async function userPost(req: Request, res: Response) {
     const { email, password } = res.locals.user;
@@ -10,7 +10,6 @@ export async function userPost(req: Request, res: Response) {
             email: user.email
         })
     } catch (error) {
-        console.log(error.name)
         if (error.name === "DuplicatedEmailError") {
             return res.status(409).send(error);
         }

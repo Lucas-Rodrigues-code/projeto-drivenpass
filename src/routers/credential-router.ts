@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { createCredential, deleteCredentialById, getAllCredential, getCredentialById } from "../controllers/credential-controller.js";
-import { validateBodyCredential } from "../middlewares/validation-middleware.js";
-import { authenticateToken } from "../middlewares/validationToken-middleware.js";
+import { createCredential, deleteCredentialById, getAllCredential, getCredentialById } from "../controllers/credential-controller";
+import { validateBodyCredential } from "../middlewares/validation-middleware";
+import { authenticateToken } from "../middlewares/validationToken-middleware";
 
 const credentialRouter = Router();
 

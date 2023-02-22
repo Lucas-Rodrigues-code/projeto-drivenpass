@@ -1,6 +1,6 @@
 import Cryptr from 'cryptr';
-import { idError, titleAlreadyInUse } from "../errors/errors.js";
-import { credentialRepository } from "../repositories/credential-repository.js";
+import { idError, titleAlreadyInUse } from "../errors/errors";
+import { credentialRepository } from "../repositories/credential-repository";
 
 export async function create(title: string, url: string, username: string, password: string, userId: number) {
     await rulesCredential(userId, title)

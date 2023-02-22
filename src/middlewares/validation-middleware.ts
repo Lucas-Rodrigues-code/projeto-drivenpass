@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { createCredentialSchema, createNetworkSchema, createUserSchema } from "../schemas/user-schema.js";
+import { createCredentialSchema, createNetworkSchema, createUserSchema } from "../schemas/user-schema";
 
 export function validateBody(req: Request, res: Response, next: NextFunction) {
     const user = req.body;

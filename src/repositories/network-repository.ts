@@ -1,4 +1,4 @@
-import prisma from "../database/database.js"
+import prisma from "../database/database"
 
 async function create(title: string, network: string, password: string, userId: number) {
     const credential = await prisma.network.create({

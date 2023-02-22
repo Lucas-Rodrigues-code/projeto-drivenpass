@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { credentialService } from "../services/credential-service.js";
+import { credentialService } from "../services/credential-service";
 
 export async function createCredential(req: Request, res: Response) {
     const { username, password, url, title } = res.locals.credential;

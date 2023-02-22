@@ -1,9 +1,9 @@
-import { duplicatedEmailError, invalidCredentialsError } from "../errors/errors.js";
+import { duplicatedEmailError, invalidCredentialsError } from "../errors/errors";
 import bcrypt from "bcrypt";
-import { userRepository } from "../repositories/user-repository.js";
+import { userRepository } from "../repositories/user-repository";
 import { User } from ".prisma/client";
 import jwt from "jsonwebtoken";
-import sessionRepository from "../repositories/sesseion-repository.js";
+import sessionRepository from "../repositories/sesseion-repository";
 
 export async function createUser(email: string, password: string): Promise<User> {
     await uniqueEmail(email)
