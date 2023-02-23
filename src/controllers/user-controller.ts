@@ -5,7 +5,7 @@ export async function userPost(req: Request, res: Response) {
     const { email, password } = res.locals.user;
     try {
         const user = await userService.createUser(email, password);
-        return res.status(200).json({
+        return res.status(201).json({
             id: user.id,
             email: user.email
         })

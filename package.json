@@ -1,13 +1,11 @@
 {
   "name": "projeto-drivenpass",
   "version": "1.0.0",
-  "type": "module",
   "description": "",
-  "main": "src/app.js",
+  "main": "src/app.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx nodemon src/app.ts",
-    "build": "ttsc -p tsconfig.build.json"
+    "test": "npx jest --runInBand --forceExit",
+    "start": "npx nodemon src/app.ts"
   },
   "repository": {
     "type": "git",

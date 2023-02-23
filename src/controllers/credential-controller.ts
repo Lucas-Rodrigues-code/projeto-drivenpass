@@ -11,7 +11,7 @@ export async function createCredential(req: Request, res: Response) {
         return res.status(200).send(credential)
     } catch (error) {
         if (error.name === "Conflict") {
-            res.status(409).send(error)
+            res.status(401).send(error)
         }
         res.status(500)
     }
