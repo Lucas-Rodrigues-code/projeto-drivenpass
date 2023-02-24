@@ -116,25 +116,9 @@ describe("GET/network/id", () => {
         const network2 = await createNetwork(body2.title, body2.network, body2.password, user2.id)
 
         const response = await api.get(`/network/${network2.id}`).set("Authorization", `Bearer ${token}`);
-       
+
         expect(response.status).toBe(409);
     });
-
-    /*   it("should respond with status code 200 when ID it's  your", async () => {
-          const user = await createUser();
-          const token = await generateValidToken(user);
-          const body = {
-              title: faker.lorem.word(),
-              network: faker.lorem.word(),
-              password: faker.internet.password(6)
-          }
-          const network = await createNetwork(body.title, body.network, body.password, user.id)
-          
-          const response = await api.get(`/network/${network.id}`).set("Authorization", `Bearer ${token}`);
-          expect(response.status).toBe(200);
-      }); */
-
-
 
 })
 
@@ -183,7 +167,7 @@ describe("DELETE/network/id", () => {
         const network2 = await createNetwork(body2.title, body2.network, body2.password, user2.id)
 
         const response = await api.delete(`/network/${network2.id}`).set("Authorization", `Bearer ${token}`);
-        
+
         expect(response.status).toBe(409);
     });
 

@@ -112,49 +112,34 @@ describe("GET/credential/id", () => {
     expect(response.body).toEqual(idError());
   });
 
-   it("should respond with status code 409 when ID exist but its not your", async () => {
-      const user = await createUser();
-      const token = await generateValidToken(user);
-      const body = {
-        title: faker.lorem.word(),
-        url: faker.internet.url(),
-        username: faker.lorem.word(),
-        password: faker.internet.password(6)
-      }
-      const credential = await createCredential(body.title, body.url, body.username, body.password, user.id)
-      
+  it("should respond with status code 409 when ID exist but its not your", async () => {
+    const user = await createUser();
+    const token = await generateValidToken(user);
+    const body = {
+      title: faker.lorem.word(),
+      url: faker.internet.url(),
+      username: faker.lorem.word(),
+      password: faker.internet.password(6)
+    }
+    const credential = await createCredential(body.title, body.url, body.username, body.password, user.id)
 
-      const user2 = await createUser();
-      const token2 = await generateValidToken(user);
 
-      const body2 = {
-        title: faker.lorem.word(),
-        url: faker.internet.url(),
-        username: faker.lorem.word(),
-        password: faker.internet.password(6)
-      }
-      const credential2 = await createCredential(body2.title, body2.url, body2.username, body2.password, user2.id)
+    const user2 = await createUser();
+    const token2 = await generateValidToken(user);
 
-      const response = await api.get(`/credential/${credential2.id}`).set("Authorization", `Bearer ${token}`);
-      
-      expect(response.status).toBe(409);
-    });   
+    const body2 = {
+      title: faker.lorem.word(),
+      url: faker.internet.url(),
+      username: faker.lorem.word(),
+      password: faker.internet.password(6)
+    }
+    const credential2 = await createCredential(body2.title, body2.url, body2.username, body2.password, user2.id)
 
-   /*  it("should respond with status code 409 when ID exist", async () => {
-      const user = await createUser();
-      const token = await generateValidToken(user);
-      const body = {
-        title: faker.lorem.word(),
-        url: faker.internet.url(),
-        username: faker.lorem.word(),
-        password: faker.internet.password(6)
-      }
-      const credential = await createCredential(body.title, body.url, body.username, body.password, user.id)
-      
-      const response = await api.get(`/credential/${credential.id}`).set("Authorization", `Bearer ${token}`);
-      
-      expect(response.status).toBe(200);
-    });  */
+    const response = await api.get(`/credential/${credential2.id}`).set("Authorization", `Bearer ${token}`);
+
+    expect(response.status).toBe(409);
+  });
+
 })
 
 describe("DELETE/credential/id", () => {
@@ -179,7 +164,7 @@ describe("DELETE/credential/id", () => {
       password: faker.internet.password(6)
     }
     const credential = await createCredential(body.title, body.url, body.username, body.password, user.id)
-    
+
 
     const user2 = await createUser();
     const token2 = await generateValidToken(user);
@@ -193,9 +178,9 @@ describe("DELETE/credential/id", () => {
     const credential2 = await createCredential(body2.title, body2.url, body2.username, body2.password, user2.id)
 
     const response = await api.delete(`/credential/${credential2.id}`).set("Authorization", `Bearer ${token}`);
-    
+
     expect(response.status).toBe(409);
     expect(response.body).toEqual(idError());
-  }); 
+  });
 })
 
