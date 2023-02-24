@@ -1,11 +1,11 @@
-import server from "../../src/app";
 import supertest from "supertest"
 import prisma from "../../src/database/database";
 import { faker } from "@faker-js/faker";
 import { createUser } from "../factories/user.factori";
 import { duplicatedEmailError, invalidCredentialsError } from "../../src/errors/errors";
+import app from "../../src/app";
 
-const api = supertest(server)
+const api = supertest(app)
 
 beforeAll(async () => {
     await prisma.credential.deleteMany({})
@@ -70,6 +70,16 @@ describe("POST/login", () => {
     it("if email or password are incorrect, should respond with status code 409", async () => {
         const body = generateValidBody()
         const response = await api.post("/login").send(body);
+
+        expect(response.status).toBe(409);
+        expect(response.body).toEqual(invalidCredentialsError());
+    })
+
+    it("if password are incorrect, should respond with status code 409", async () => {
+        const user = await createUser()
+        delete user.id
+        user.password = faker.internet.password(10)
+        const response = await api.post("/login").send(user);
 
         expect(response.status).toBe(409);
         expect(response.body).toEqual(invalidCredentialsError());

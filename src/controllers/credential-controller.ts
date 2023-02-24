@@ -8,7 +8,7 @@ export async function createCredential(req: Request, res: Response) {
     try {
         const credential = await credentialService.create(title, url, username, password, userId);
 
-        return res.status(200).send(credential)
+        return res.status(201).send(credential)
     } catch (error) {
         if (error.name === "Conflict") {
             res.status(401).send(error)

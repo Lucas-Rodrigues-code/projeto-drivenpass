@@ -8,20 +8,25 @@ export async function authenticateToken(req: Request, res: Response, next: NextF
   
     const token = authHeader.split(" ")[1];
     if (!token) return  res.status(401).send({message:"You must be signed in to continue"});
-  
     try {
-      const { userId } = jwt.verify(token, process.env.JWT_SECRET) as JWTPayload;
+      
+      const { userId } = jwt.verify(token, process.env.JWT_SECRET,) as JWTPayload;
+      
       const session = await prisma.session.findFirst({
         where: {
           token,
         },
       });
+  
       if (!session) return res.status(401).send({message:"You must be signed in to continue"});
       
       res.locals.userId = userId;
       next();
     } catch (err) {
-      return res.status(401);
+      if(err.name === "JsonWebTokenError"){
+        return res.status(401).send({message:"You must be signed in to continue"});
+      }
+      
     }
   }
   type JWTPayload = {

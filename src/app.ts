@@ -1,21 +1,16 @@
-import express, { json,Express } from "express";
+import express, { json, Express } from "express";
 import cors from "cors";
 import { credentialRouter } from "./routers/credential-router";
 import { networklRouter } from "./routers/network-router";
-import { usersRouter } from "./routers/user-router" 
-import prisma from "./database/database";
+import { usersRouter } from "./routers/user-router"
 
-const server = express();
-server.use(cors())
-server.use(json());
-server.use(usersRouter)
-server.use(credentialRouter) 
-server.use(networklRouter)
+const app = express();
+app.use(cors())
+app.use(json());
+app.use(usersRouter)
+app.use(credentialRouter)
+app.use(networklRouter)
 
-server.listen(4000, async() => {
-    console.log("Executando")
-    
-}) 
-export default server;
+export default  app ;
 
 

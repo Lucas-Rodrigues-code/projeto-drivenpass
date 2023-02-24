@@ -8,11 +8,9 @@ export async function createNetwork(req: Request, res: Response) {
     try {
         const wifi = await networkService.create(title, network, password, userId);
 
-        return res.status(200).send(wifi)
+        return res.status(201).send(wifi)
     } catch (error) {
-        if (error.name === "Conflict") {
-            res.status(409).send(error)
-        }
+        
         res.status(500)
     }
 }

@@ -23,4 +23,17 @@ export async function createUser(params: Partial<User> = {}): Promise<User> {
   });
 }
 
+import { Session } from "@prisma/client";
+
+export async function createSession(token: string): Promise<Session> {
+  const user = await createUser(); 
+
+  return prisma.session.create({
+    data: {
+      token: token,
+      userId:user.id
+    },
+  });
+}
+
 

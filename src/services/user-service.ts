@@ -53,6 +53,7 @@ async function createSession(userId: number) {
         token,
         userId,
     );
+    
 }
 
 export const userService = {
